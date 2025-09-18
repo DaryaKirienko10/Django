@@ -1,3 +1,4 @@
+from django.http import Http404, JsonResponse
 from django.shortcuts import render
 
 DATA = {
@@ -19,12 +20,27 @@ DATA = {
     # можете добавить свои рецепты ;)
 }
 
-# Напишите ваш обработчик. Используйте DATA как источник данных
-# Результат - render(request, 'calculator/index.html', context)
-# В качестве контекста должен быть передан словарь с рецептом:
-# context = {
-#   'recipe': {
-#     'ингредиент1': количество1,
-#     'ингредиент2': количество2,
-#   }
-# }
+def recipes(request, recipe_name):
+    recipe_name = recipe_name.lower()
+
+    if recipe_name in DATA:
+        recipe = DATA[recipe_name]
+        servings = request.GET.get('servings')
+
+        if servings is not None:
+            try:
+                servings = int(servings)
+                if servings <= 0:
+                    raise ValueError
+            except ValueError:
+                return JsonResponse({'error':'Параметр servings должен быть положительным целым числом'}, status = 400)
+        else:
+            servings = 1
+
+        mod_recipe = {ingredient: round(amount * servings, 2) for ingredient, amount in recipe.items()}
+        context = {
+            'recipe': mod_recipe
+        }
+        return render(request, 'calculator/index.html', context)
+    else:
+        raise Http404("Рецепт не найден")
