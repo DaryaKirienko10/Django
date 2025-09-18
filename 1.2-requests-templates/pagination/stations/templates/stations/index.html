@@ -1,12 +1,12 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <!-- Basic Page Needs -->
     <meta charset="utf-8">
-    <title>Title</title>
-    <meta name="description" content="">
+    <title>Остановки общественного транспорта</title>
+    <meta name="description" content="Список остановок общественного транспорта">
     <meta name="author" content="">
 
     <!-- Mobile Specific Metas -->
@@ -41,13 +41,17 @@
             </tbody>
         </table>
 
-        {% if page.has_previous %}
-            <a class="button button-primary" href="?page={{ page.previous_page_number }}">⟵</a>
-        {% endif %}
-        <a class="button disabled" href="">{{ page.number }}</a>
-        {% if page.has_next %}
-            <a class="button button-primary" href="?page={{ page.next_page_number }}">⟶</a>
-        {% endif %}
+        <div class="pagination">
+            {% if page.has_previous %}
+                <a class="button button-primary" href="?page=1">Первая</a>
+                <a class="button button-primary" href="?page={{ page.previous_page_number }}">⟵</a>
+            {% endif %}
+            <span class="button disabled">Страница {{ page.number }}</span>
+            {% if page.has_next %}
+                <a class="button button-primary" href="?page={{ page.next_page_number }}">⟶</a>
+                <a class="button button-primary" href="?page={{ page.paginator.num_pages }}">Последняя</a>
+            {% endif %}
+        </div>
     </div>
 </div>
 </body>
