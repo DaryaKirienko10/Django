@@ -1,7 +1,8 @@
-"""smart_home URL Configuration
+"""
+URL configuration for products project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.2/topics/http/urls/
+    https://docs.djangoproject.com/en/4.2/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -14,9 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+
+from main.views import products_list_view, ProductDetailsView, ProductFilteredReviews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('measurement.urls')),  # подключаем маршруты из приложения measurement
+    path('products/', products_list_view),
+    path('products/<int:product_id>/', ProductDetailsView.as_view()),
+    path('products/reviews/<int:product_id>/', ProductFilteredReviews.as_view())
 ]
